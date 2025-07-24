@@ -1,7 +1,7 @@
 import { Body, ForbiddenException, Injectable } from "@nestjs/common";
 import { PrismaService } from "src/prisma/prisma.service";
 import * as bcrypt from "bcrypt";
-import { Role } from "generated/prisma";
+// import { Role } from "generated/prisma";
 import { AdminAuthDto } from "./dto/admin-auth.dto";
 import { AdminLoginDto } from "./dto/admin-login.dto";
 import { ConfigService } from "@nestjs/config";
@@ -30,7 +30,7 @@ export class AdminAuthService {
                     firstName: dto.firstName,
                     lastName: dto.lastName,
                     nickName: dto.nickName,
-                    role: Role.ADMIN
+                    // role: Role.ADMIN
                 }
             })
             // return this.signToken(admin.id, admin.email);

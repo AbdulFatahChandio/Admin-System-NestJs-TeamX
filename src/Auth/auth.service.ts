@@ -2,7 +2,7 @@ import { Body, ForbiddenException, Injectable } from "@nestjs/common";
 import { PrismaService } from "src/prisma/prisma.service";
 import { AuthDto } from "./dto/auth.dto";
 import * as bcrypt from "bcrypt";
-import { Role } from "generated/prisma";
+// import { Role } from "generated/prisma";
 import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
 import { AuthLoginDto } from "./dto/auth-login.dto";
@@ -30,7 +30,7 @@ export class AuthService {
                     firstName: dto.firstName,
                     lastName: dto.lastName,
                     nickName: dto.nickName,
-                    role: Role.USER
+                    role: dto.role
                 }
             })
             // return user
@@ -40,8 +40,11 @@ export class AuthService {
             
             data: {
                 email: user?.email,
+                password:user?.password,
                 firstName: user?.firstName,
                 lastName: user?.lastName,
+                nickName:user?.nickName,
+                role:user?.role,
                  token : await this.signToken(user.id, user.email)
             },
             // token: await this.signToken(user.id, user.email)
@@ -97,6 +100,7 @@ export class AuthService {
                 email: user?.email,
                 firstName: user?.firstName,
                 lastName: user?.lastName,
+                role :user?.role,
                  token : await this.signToken(user.id, user.email)
             },
             // token: await this.signToken(user.id, user.email)

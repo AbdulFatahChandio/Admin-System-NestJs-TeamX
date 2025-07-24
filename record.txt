@@ -1,0 +1,9 @@
+{
+    "email":"admin123gmail.com",
+    "password":"12324",
+    "firstName":"admin",
+    "lastName":"chandio",
+    "nickName":"fatah" 
+}
+
+

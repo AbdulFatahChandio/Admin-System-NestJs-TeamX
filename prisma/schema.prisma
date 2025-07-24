@@ -24,10 +24,23 @@ model user {
   lastName  String
   nickName  String?
 
-  role Role @default(USER)
+  role String @default("user")
 }
 
-enum Role {
-  USER
-  ADMIN
+model book {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  title String
+  author String
+  description String
+  publish_Year String
+  edition String
+  publisher String
 }
+
+// enum Role {
+//   USER
+//   ADMIN
+// }
