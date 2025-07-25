@@ -5,8 +5,9 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
-  output   = "../generated/prisma"
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearchPostgres"]
+  output          = "../generated/prisma"
 }
 
 datasource db {
@@ -22,7 +23,7 @@ model user {
   password  String
   firstName String
   lastName  String
-  nickName  String?
+  userName  String? @unique
 
   role String @default("user")
 }
@@ -32,12 +33,12 @@ model book {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  title String
-  author String
-  description String
+  title        String
+  author       String
+  description  String
   publish_Year String
-  edition String
-  publisher String
+  edition      String
+  publisher    String
 }
 
 // enum Role {

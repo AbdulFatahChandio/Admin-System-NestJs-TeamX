@@ -1,9 +1,8 @@
 {
-    "email":"admin123gmail.com",
-    "password":"12324",
-    "firstName":"admin",
-    "lastName":"chandio",
-    "nickName":"fatah" 
+    "email":"admin1234@gmail.com",
+    "password":"Ad123456@7890",
+    "firstName": "admin",
+    "lastName":"fatah",
+    "userName":"admin10",
+    "role":"admin"
 }
-
-

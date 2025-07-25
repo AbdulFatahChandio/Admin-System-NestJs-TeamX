@@ -29,26 +29,26 @@ export class AuthService {
                     password: hash,
                     firstName: dto.firstName,
                     lastName: dto.lastName,
-                    nickName: dto.nickName,
+                    userName: dto.userName,
                     role: dto.role
                 }
             })
             // return user
-           
+
             // return this.signToken(user.id, user.email); It returns only token
             return {
-            
-            data: {
-                email: user?.email,
-                password:user?.password,
-                firstName: user?.firstName,
-                lastName: user?.lastName,
-                nickName:user?.nickName,
-                role:user?.role,
-                 token : await this.signToken(user.id, user.email)
-            },
-            // token: await this.signToken(user.id, user.email)
-        }
+
+                data: {
+                    email: user?.email,
+                    password: user?.password,
+                    firstName: user?.firstName,
+                    lastName: user?.lastName,
+                    userName: user?.userName,
+                    role: user?.role,
+                    token: await this.signToken(user.id, user.email)
+                },
+                // token: await this.signToken(user.id, user.email)
+            }
             // return {
             //     Token: await this.signToken(user.id, user.email),
             //     User: {
@@ -59,7 +59,7 @@ export class AuthService {
             // }
         } catch (error: any) {
             if (error?.code === 'P2002') {
-                throw new ForbiddenException('Credentials taken');
+                throw new ForbiddenException('Email & Username must be unique');
             }
             throw error;
         }
@@ -95,13 +95,13 @@ export class AuthService {
 
 
         return {
-            
+
             data: {
                 email: user?.email,
                 firstName: user?.firstName,
                 lastName: user?.lastName,
-                role :user?.role,
-                 token : await this.signToken(user.id, user.email)
+                role: user?.role,
+                token: await this.signToken(user.id, user.email)
             },
             // token: await this.signToken(user.id, user.email)
         }

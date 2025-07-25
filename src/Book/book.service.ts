@@ -43,6 +43,7 @@ export class BookService {
     }
 
     async getBook(@Body() dto: EditBookDto) {
+
         const book = await this.prisma.book.findFirst({
             where: {
                 id: dto.id
@@ -56,14 +57,50 @@ export class BookService {
     }
 
     async getBooks(dto: PaginationDto) {
-        //console.log("🚀 ~ BookService ~ getBooks ~ dto:", dto)
-        const skip = (dto.page - 1) * dto.limit
-       // console.log("🚀 ~ BookService ~ getBooks ~ skip:", skip)
+        const total = await this.prisma.book.count({where: {
+                title: {
+                    search: dto.search,
+                },
+            },});
+
+        const skip = (dto.page - 1) * dto.limit;
+        const totalPages = Math.ceil(total / dto.limit);
+        //const totalPages = Math.ceil(total / dto.limit);
+        console.log("🚀 ~ BookService ~ getBooks ~ totalPages:", totalPages)
         const books = await this.prisma.book.findMany({
             skip: skip, //This is used for the pagination to get some specific books 
-            take: dto.limit
+            where: {
+                title: {
+                    search: dto.search,
+                },
+            },
+            take: dto.limit,
         })
-        return books
+        return {
+            total: total,
+            total_Pages: totalPages,
+            data:
+                books
+        }
+
+        //     const total=this.prisma.book.count({
+        //       where: { // <- duplicate
+        //       id: dto.id
+        //     }
+        //   })
+        // var total = await this.prisma.book.count({ // To find all books exist in tables 
+        //     select: {
+        //         id: true, // Count all records
+        //         //: true, // Count all non-null field values
+        //     },
+        // })
+
+        //console.log("🚀 ~ BookService ~ getBooks ~ total:", total)
+        //console.log("🚀 ~ BookService ~ getBooks ~ dto:", dto)
+
+        //const skip = (dto.page - 1) * dto.limit
+        // console.log("🚀 ~ BookService ~ getBooks ~ skip:", skip)
+
 
     }
 
