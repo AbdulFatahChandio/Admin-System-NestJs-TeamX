@@ -27,6 +27,15 @@ export class EditBookDto {
 
     @IsInt()
     @IsNotEmpty()
-    id:number
+    id: number
+
+    @IsInt()
+    @IsOptional()
+    price: number
+
+
+    @IsInt()
+    @IsOptional()
+    stock: number
 
 }

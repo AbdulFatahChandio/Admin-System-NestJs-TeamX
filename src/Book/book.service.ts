@@ -24,7 +24,9 @@ export class BookService {
                     description: dto.description,
                     publish_Year: dto.publish_Year,
                     edition: dto.edition,
-                    publisher: dto.publisher
+                    publisher: dto.publisher,
+                    price : dto.price,
+                    Stock: dto.stock
                 }
             })
             // return user
@@ -85,8 +87,8 @@ export class BookService {
             take: dto.limit,
         })
         return {
-            message:'All books here',
-            status:'success',
+            // message:'All books here',
+            // status:'success',
             total: total,
             total_Pages: totalPages,
             data:
@@ -133,7 +135,9 @@ export class BookService {
                 description: dto.description,
                 publish_Year: dto.publish_Year,
                 edition: dto.edition,
-                publisher: dto.publisher
+                publisher: dto.publisher,
+                price:dto.price,
+                Stock:dto.price
             }
         })
         console.log("🚀 ~ BookService ~ updateBook ~ updatedBoard:", updatedBoard)

@@ -23,7 +23,7 @@ model user {
   password  String
   firstName String
   lastName  String
-  userName  String?  @unique
+  userName  String  @unique
 
   role String @default("user")
 
@@ -55,6 +55,7 @@ model order {
   // title       String
   // author      String
   // description String
+  customer String
   unitPrice       Int
   quantity        Int
   totalPrice      Int
