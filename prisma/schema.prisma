@@ -25,10 +25,9 @@ model user {
   lastName  String
   userName  String?  @unique
 
-  role   String  @default("user")
-  book   book?   @relation(fields: [bookId], references: [id])
-  bookId Int?
-  order  order[]
+  role String @default("user")
+
+  orders order[]
 }
 
 model book {
@@ -42,7 +41,10 @@ model book {
   publish_Year String
   edition      String
   publisher    String
-  users        user[]
+  price        Int    @default(100)
+  Stock        Int    @default(0)
+
+  orders order[]
 }
 
 model order {
@@ -50,15 +52,19 @@ model order {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  title       String
-  author      String
-  description String
-  price       Int
-  quantity    Int
-  shipping    String
+  // title       String
+  // author      String
+  // description String
+  unitPrice       Int
+  quantity        Int
+  totalPrice      Int
+  shippingAddress String
 
-  orderBy   user @relation(fields: [userId], references: [id])
-  userId Int
+  orderedBy user @relation(fields: [userId], references: [id])
+  userId    Int
+
+  bookOrdered book @relation(fields: [bookId], references: [id])
+  bookId      Int
 }
 
 // enum Role {
