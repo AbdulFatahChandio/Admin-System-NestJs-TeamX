@@ -23,9 +23,12 @@ model user {
   password  String
   firstName String
   lastName  String
-  userName  String? @unique
+  userName  String?  @unique
 
-  role String @default("user")
+  role   String  @default("user")
+  book   book?   @relation(fields: [bookId], references: [id])
+  bookId Int?
+  order  order[]
 }
 
 model book {
@@ -39,6 +42,23 @@ model book {
   publish_Year String
   edition      String
   publisher    String
+  users        user[]
+}
+
+model order {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  title       String
+  author      String
+  description String
+  price       Int
+  quantity    Int
+  shipping    String
+
+  orderBy   user @relation(fields: [userId], references: [id])
+  userId Int
 }
 
 // enum Role {
