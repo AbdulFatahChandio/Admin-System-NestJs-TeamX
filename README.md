@@ -25,6 +25,62 @@
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
+# 📘 Book Management System (With Authentication & Authorization)
+
+A secure, role-based Book Management System built with **NestJS**, **Prisma**, and **PostgreSQL**. This application supports user authentication and authorization, allowing only **admins** to manage books (create, update, delete), while both **users and admins** can view all or individual books.
+
+---
+
+## 🚀 Features
+
+- ✅ User Authentication (JWT-based)
+- 🔐 Role-Based Authorization (Admin & User)
+- 📚 Book CRUD (Admin only)
+- 📖 View All Books / Single Book (User & Admin)
+- 🛡️ Secure API Endpoints
+- 🧪 Validation and Error Handling
+
+---
+
+## 🧑‍💻 Roles
+
+| Role  | Permissions |
+|-------|-------------|
+| Admin | Create, Update, Delete, View Books |
+| User  | View All Books, View Single Book   |
+
+---
+
+## 🛠️ Tech Stack
+
+- **NestJS** – Backend framework
+- **TypeScript** – Typed JavaScript
+- **Prisma ORM** – Database access layer
+- **PostgreSQL** – Relational database
+- **JWT** – Authentication
+- **bcrypt** – Password hashing
+
+---
+[![NestJS](https://img.shields.io/badge/NestJS-E0234E?style=for-the-badge&logo=nestjs&logoColor=white)](https://nestjs.com/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
+[![Prisma](https://img.shields.io/badge/Prisma-2D3748?style=for-the-badge&logo=prisma&logoColor=white)](https://www.prisma.io/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![JWT](https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens)](https://jwt.io/)
+[![npm](https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white)](https://www.npmjs.com/)
+[![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)](https://git-scm.com/)
+[![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/)
+[![Postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white)](https://www.postman.com/)
+
+
+A secure, role-based Book Management System built with **NestJS**, **Prisma**, and **PostgreSQL**. This application supports user authentication and authorization, allowing only **admins** to manage books (create, update, delete), while both **users and admins** can view all or individual books.
+
+## 🔐 Authentication Flow
+
+1. **Signup/Login** to receive a **JWT token**
+2. Attach token in `Authorization: Bearer <token>` header
+3. Access protected routes based on your role (Admin/User)
+---
 ## Project setup
 
 ```bash
