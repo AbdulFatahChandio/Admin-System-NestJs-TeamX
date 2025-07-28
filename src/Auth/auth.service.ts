@@ -37,6 +37,8 @@ export class AuthService {
 
             // return this.signToken(user.id, user.email); It returns only token
             return {
+                message: 'User created successfully',
+                status: 'success',
 
                 data: {
                     email: user?.email,
@@ -95,7 +97,8 @@ export class AuthService {
 
 
         return {
-
+            message: 'User login successfully',
+            status: 'success',
             data: {
                 email: user?.email,
                 firstName: user?.firstName,

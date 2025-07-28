@@ -30,7 +30,10 @@ export class BookService {
             // return user
 
             // return this.signToken(user.id, user.email); It returns only token
-            return book
+            return {
+                message: 'Book created successfully', status: 'success',
+                book
+            }
             // token: await this.signToken(user.id, user.email)
 
         } catch (error: any) {
@@ -52,16 +55,21 @@ export class BookService {
         if (!book) {
             throw new NotFoundException("Book doesn't Exist")
         }
-        return book
+        return {
 
+            data:
+                book
+        }
     }
 
     async getBooks(dto: PaginationDto) {
-        const total = await this.prisma.book.count({where: {
+        const total = await this.prisma.book.count({
+            where: {
                 title: {
                     search: dto.search,
                 },
-            },});
+            },
+        });
 
         const skip = (dto.page - 1) * dto.limit;
         const totalPages = Math.ceil(total / dto.limit);
@@ -77,6 +85,8 @@ export class BookService {
             take: dto.limit,
         })
         return {
+            message:'All books here',
+            status:'success',
             total: total,
             total_Pages: totalPages,
             data:
@@ -113,7 +123,10 @@ export class BookService {
         if (!existingBook) {
             throw new NotFoundException("Book doesn't Exist")
         }
-        const updatedBoard = this.prisma.book.update({
+        const updatedBoard = await this.prisma.book.update({
+             where: {
+                id: dto.id,
+            },
             data: {
                 title: dto.title,
                 author: dto.author,
@@ -121,12 +134,15 @@ export class BookService {
                 publish_Year: dto.publish_Year,
                 edition: dto.edition,
                 publisher: dto.publisher
-            },
-            where: {
-                id: dto.id,
             }
         })
-        return updatedBoard
+        console.log("🚀 ~ BookService ~ updateBook ~ updatedBoard:", updatedBoard)
+        return {
+            message: 'Book updated successfully', status: 'success',
+            data:
+                updatedBoard
+
+        }
     }
 
     async deleteBook(dto: EditBookDto) {
@@ -145,6 +161,10 @@ export class BookService {
             }
         })
 
-        return book
+        return {
+            message: 'Book deleted successfully', status: 'success',
+            data:
+                book
+        }
     }
 }
