@@ -1,9 +1,10 @@
-import { Body, ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
+import { Body, ForbiddenException, Injectable, NotFoundException, Param } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { PrismaService } from "src/prisma/prisma.service";
 import { CreateUserOrderDto } from "./dto/user.order-create.dto";
 import { user } from "generated/prisma";
 import { Decimal } from "generated/prisma/runtime/library";
+import { EditUserOrderDto } from "./dto/user.order-edit.dto";
 
 @Injectable()
 export class UserOrderService {
@@ -67,4 +68,22 @@ export class UserOrderService {
         }
     }
 
+    async getOrder(@Param() dto: EditUserOrderDto, currentUser:user) {
+    
+            const book = await this.prisma.order.findFirst({
+                where: {
+                    id: dto.id,
+                    userId:currentUser.id
+                },
+            });
+            if (!book) {
+                throw new NotFoundException("No Order Found")
+            }
+            return {
+    
+                data:
+                    book
+            }
+        }
+    
 }

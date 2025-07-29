@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post, UseGuards } from "@nestjs/common";
 import { UserOrderService } from "./user.order.service";
 import { JwtGuard } from "src/Auth/Guard/jwt.guard";
 import { RolesGuard } from "src/Role/roles.guard";
@@ -7,6 +7,7 @@ import { Role } from "src/Role/role.enum";
 import { CreateUserOrderDto } from "./dto/user.order-create.dto"; 
 import { user } from "generated/prisma";
 import { GetUser } from "src/Auth/decorater/get-user.decorater";
+import { EditUserOrderDto } from "./dto/user.order-edit.dto";
 
 
 @UseGuards(JwtGuard)
@@ -21,5 +22,12 @@ export class UserOrderController {
     @Roles(Role.User)
     createOrder(@Body() dto: CreateUserOrderDto , @GetUser() currentUser: user) {
         return this.userOrderService.createOrder(dto , currentUser)
+    }
+
+    @Get('/order/:id')
+    @UseGuards(RolesGuard)
+    @Roles(Role.User)
+    getOrder(@Param() dto: EditUserOrderDto , @GetUser() currentUser: user) {
+        return this.userOrderService.getOrder(dto , currentUser)
     }
 }
