@@ -25,7 +25,7 @@ export class BookService {
                     publish_Year: dto.publish_Year,
                     edition: dto.edition,
                     publisher: dto.publisher,
-                    price : dto.price,
+                    price: dto.price,
                     Stock: dto.stock
                 }
             })
@@ -69,7 +69,9 @@ export class BookService {
             where: {
                 title: {
                     search: dto.search,
+                    
                 },
+                
             },
         });
 
@@ -80,6 +82,7 @@ export class BookService {
         const books = await this.prisma.book.findMany({
             skip: skip, //This is used for the pagination to get some specific books 
             where: {
+                deletedAt: null,
                 title: {
                     search: dto.search,
                 },
@@ -117,6 +120,9 @@ export class BookService {
     }
 
     async updateBook(@Body() dto: EditBookDto) {
+        //console.log("🚀 ~ BookService ~ updateBook ~ dto:", dto)
+        //console.log("🚀 ~ BookService ~ updateBook ~ Body:", Body)
+        // console.log("🚀 ~ BookService ~ updateBook ~ updateBook:", updateBook)
         const existingBook = await this.prisma.book.findFirst({
             where: {
                 id: dto.id
@@ -125,8 +131,8 @@ export class BookService {
         if (!existingBook) {
             throw new NotFoundException("Book doesn't Exist")
         }
-        const updatedBoard = await this.prisma.book.update({
-             where: {
+        const updatedBook = await this.prisma.book.update({
+            where: {
                 id: dto.id,
             },
             data: {
@@ -136,39 +142,79 @@ export class BookService {
                 publish_Year: dto.publish_Year,
                 edition: dto.edition,
                 publisher: dto.publisher,
-                price:dto.price,
-                Stock:dto.price
+                price: dto.price,
+                Stock: dto.stock
             }
         })
-        console.log("🚀 ~ BookService ~ updateBook ~ updatedBoard:", updatedBoard)
+        //console.log("🚀 ~ BookService ~ updateBook ~ updatedBoard:", updatedBook)
         return {
             message: 'Book updated successfully', status: 'success',
             data:
-                updatedBoard
+                updatedBook
 
         }
     }
+
+    // async deleteBook(dto: EditBookDto) {
+    //     const existingBook = await this.prisma.book.findFirst({
+    //         where: {
+    //             id: dto.id
+    //         },
+    //     });
+    //     if (!existingBook) {
+    //         throw new NotFoundException("Book doesn't Exist")
+    //     }
+
+    //     const book = await this.prisma.book.delete({
+    //         where: {
+    //             id: dto.id
+    //         }
+    //     })
+
+    //     const softDeleted = await this.prisma.user.update({
+    //         where: {
+    //             id: dto.id
+    //         },
+    //         data: {
+    //             deletedAt: new Date()
+    //         },
+    //     });
+
+
+    //     return {
+    //         message: 'Book deleted successfully', status: 'success',
+    //         data:
+    //             book,
+    //             softDeleted
+    //     }
+    // }
 
     async deleteBook(dto: EditBookDto) {
         const existingBook = await this.prisma.book.findFirst({
             where: {
-                id: dto.id
+                id: dto.id,
+                deletedAt: null // Only fetch non-deleted books
             },
         });
+
         if (!existingBook) {
-            throw new NotFoundException("Book doesn't Exist")
+            throw new NotFoundException("Book doesn't exist or already deleted");
         }
 
-        const book = await this.prisma.book.delete({
+        const softDeletedBook = await this.prisma.book.update({
             where: {
                 id: dto.id
-            }
-        })
+            },
+            data: {
+                deletedAt: new Date()
+            },
+        });
 
         return {
-            message: 'Book deleted successfully', status: 'success',
-            data:
-                book
-        }
+            message: 'Book deleted successfully',
+            status: 'success',
+            data: softDeletedBook
+        };
     }
+
 }

@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "book" ALTER COLUMN "deletedAt" DROP NOT NULL,
+ALTER COLUMN "deletedAt" DROP DEFAULT;

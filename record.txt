@@ -1,8 +1,9 @@
 {
-    "email":"admin1234@gmail.com",
-    "password":"Ad123456@7890",
-    "firstName": "admin",
-    "lastName":"fatah",
-    "userName":"admin10",
-    "role":"admin"
+     "email": "admin123@gmail.com",
+     "password": "Ad123456@7890"
+}
+
+{
+    "email": "fatah123@gmail.com",
+    "password": "Ad123456@7890"
 }

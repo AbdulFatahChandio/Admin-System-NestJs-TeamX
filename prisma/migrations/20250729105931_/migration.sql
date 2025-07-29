@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "order" ALTER COLUMN "userId" DROP NOT NULL,
+ALTER COLUMN "bookId" DROP NOT NULL;
