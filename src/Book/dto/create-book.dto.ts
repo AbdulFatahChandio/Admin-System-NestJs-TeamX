@@ -1,4 +1,7 @@
-import { IsInt, IsNotEmpty, IsString } from "class-validator";
+import { IsDecimal, IsInt, IsNotEmpty, IsPositive, IsString } from "class-validator";
+import { Decimal } from "generated/prisma/runtime/library";
+import { isFloat16Array } from "util/types";
+// import jakarta.validation.constraints.PositiveOrZero;
 
 export class CreateBookDto {
     @IsString()
@@ -25,14 +28,17 @@ export class CreateBookDto {
     @IsNotEmpty()
     publisher: string
 
-    @IsInt()
+    // @IsInt()
+    // @IsPositiveOrZe()
+    @IsDecimal()
     @IsNotEmpty()
-    price : number
+    price: Decimal
 
-    
+
     @IsInt()
+    @IsPositive()
     @IsNotEmpty()
-    stock : number
+    stock: number
 
 
 }

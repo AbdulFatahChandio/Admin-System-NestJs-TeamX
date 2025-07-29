@@ -41,7 +41,7 @@ model book {
   publish_Year String
   edition      String
   publisher    String
-  price        Int    @default(100)
+  price        Decimal    @default(100)
   Stock        Int    @default(0)
 
   orders order[]
@@ -56,9 +56,9 @@ model order {
   // author      String
   // description String
   customer String
-  unitPrice       Int
+  unitPrice       Decimal
   quantity        Int
-  totalPrice      Int
+  totalPrice      Decimal
   shippingAddress String
 
   orderedBy user @relation(fields: [userId], references: [id])
