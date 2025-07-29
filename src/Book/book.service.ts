@@ -97,26 +97,6 @@ export class BookService {
             data:
                 books
         }
-
-        //     const total=this.prisma.book.count({
-        //       where: { // <- duplicate
-        //       id: dto.id
-        //     }
-        //   })
-        // var total = await this.prisma.book.count({ // To find all books exist in tables 
-        //     select: {
-        //         id: true, // Count all records
-        //         //: true, // Count all non-null field values
-        //     },
-        // })
-
-        //console.log("🚀 ~ BookService ~ getBooks ~ total:", total)
-        //console.log("🚀 ~ BookService ~ getBooks ~ dto:", dto)
-
-        //const skip = (dto.page - 1) * dto.limit
-        // console.log("🚀 ~ BookService ~ getBooks ~ skip:", skip)
-
-
     }
 
     async updateBook(@Body() dto: EditBookDto) {

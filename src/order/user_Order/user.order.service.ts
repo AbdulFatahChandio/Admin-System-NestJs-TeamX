@@ -1,18 +1,18 @@
 import { Body, ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { PrismaService } from "src/prisma/prisma.service";
-import { CreateOrderDto } from "./dto/order-create.dto";
+import { CreateUserOrderDto } from "./dto/user.order-create.dto";
 import { user } from "generated/prisma";
 import { Decimal } from "generated/prisma/runtime/library";
 
 @Injectable()
-export class OrderService {
+export class UserOrderService {
     constructor(
         private prisma: PrismaService,
         public config: ConfigService
     ) { }
 
-    async createOrder(@Body() dto: CreateOrderDto, currentUser: user) {
+    async createOrder(@Body() dto: CreateUserOrderDto, currentUser: user) {
         try {
 
             const existingBook = await this.prisma.book.findFirst({

@@ -1,7 +1,7 @@
 import { IsDecimal, IsInt, IsNotEmpty, IsString } from "class-validator";
 import { Decimal } from "generated/prisma/runtime/library";
 
-export class CreateOrderDto {
+export class CreateUserOrderDto {
 
     @IsInt()
     @IsNotEmpty()
@@ -14,7 +14,5 @@ export class CreateOrderDto {
     @IsInt()
     @IsNotEmpty()
     bookId: number
-
-
 
 }
