@@ -5,6 +5,7 @@ import { CreateUserOrderDto } from "./dto/user.order-create.dto";
 import { user } from "generated/prisma";
 import { Decimal } from "generated/prisma/runtime/library";
 import { EditUserOrderDto } from "./dto/user.order-edit.dto";
+import { UserOrderPaginationDto } from "./dto/user-pagination.order.dto";
 
 @Injectable()
 export class UserOrderService {
@@ -19,10 +20,10 @@ export class UserOrderService {
             const existingBook = await this.prisma.book.findFirst({
                 where: {
                     id: dto.bookId,
+                    deletedAt: null
                 },
             })
-            console.log("🚀 ~ OrderService ~ createOrder ~ existingBook:", existingBook)
-            //console.log("🚀 ~ OrderService ~ createOrder ~ existingBook:", existingBook)
+
             if (!existingBook) {
                 throw new NotFoundException("Book doesn't Exist")
             }
@@ -32,7 +33,7 @@ export class UserOrderService {
             const price = existingBook.price
             const quantityDecimal = new Decimal(dto.quantity);
             const totalPrice: Decimal = quantityDecimal.mul(existingBook.price);
-            const updatedBook = await this.prisma.book.update({
+            await this.prisma.book.update({
                 data: {
                     Stock: existingBook.Stock - dto.quantity
                 },
@@ -51,9 +52,6 @@ export class UserOrderService {
                     totalPrice: totalPrice
                 }
             })
-
-            // return order
-
             return {
                 message: 'Order booked successfully', status: 'success',
                 data:
@@ -86,21 +84,30 @@ export class UserOrderService {
         }
     }
 
-    async getOrders(currentUser: user) {
+    async getOrders(dto: UserOrderPaginationDto, currentUser: user) {
 
-        const book = await this.prisma.order.findMany({
+        const total = await this.prisma.order.count({
             where: {
                 userId: currentUser.id
             },
         });
-        if (!book) {
-            throw new NotFoundException("No Order Found")
-        }
-        return {
 
+        const skip = (dto.page - 1) * dto.limit;
+        const totalPages = Math.ceil(total / dto.limit);
+        const orders = await this.prisma.order.findMany({
+            where: {
+                userId: currentUser.id
+            },
+            skip: skip,
+            take: dto.limit,
+        })
+        return {
+            total: total,
+            total_Pages: totalPages,
             data:
-                book
+                orders
         }
+
     }
 
 }

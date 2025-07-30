@@ -1,4 +1,4 @@
-import { IsInt, IsNotEmpty, IsOptional, IsString } from "class-validator";
+import { IsInt, IsNotEmpty, IsOptional, IsString, Max, Min } from "class-validator";
 
 export class EditBookDto {
     @IsString()
@@ -36,6 +36,8 @@ export class EditBookDto {
 
     @IsInt()
     @IsOptional()
+    @Min(2) 
+    @Max(1000000) 
     stock: number
 
 }

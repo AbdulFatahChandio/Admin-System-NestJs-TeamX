@@ -33,10 +33,6 @@ export class JwtStrategy extends PassportStrategy(
           id: payload.sub,
         },
       });
-    // delete (user as Partial<any>).hash;
     return user;
   }
 }
-// async validate(payload: any) {
-//     return { userId: payload.sub, username: payload.username };
-// }

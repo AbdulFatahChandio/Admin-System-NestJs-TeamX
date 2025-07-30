@@ -8,6 +8,7 @@ import { CreateUserOrderDto } from "./dto/user.order-create.dto";
 import { user } from "generated/prisma";
 import { GetUser } from "src/Auth/decorater/get-user.decorater";
 import { EditUserOrderDto } from "./dto/user.order-edit.dto";
+import { UserOrderPaginationDto } from "./dto/user-pagination.order.dto";
 
 
 @UseGuards(JwtGuard)
@@ -34,7 +35,7 @@ export class UserOrderController {
     @Get('/orders')
     @UseGuards(RolesGuard)
     @Roles(Role.User)
-    getOrders(@GetUser() currentUser: user) {
-        return this.userOrderService.getOrders(currentUser)
+    getOrders(@Body() dto : UserOrderPaginationDto, @GetUser() currentUser: user) {
+        return this.userOrderService.getOrders(dto, currentUser)
     }
 }

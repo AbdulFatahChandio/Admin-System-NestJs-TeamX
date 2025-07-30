@@ -1,9 +1,7 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards, UsePipes, ValidationPipe } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from "@nestjs/common";
 import { CreateBookDto } from "./dto/create-book.dto";
 import { BookService } from "./book.service";
 import { JwtGuard } from "src/Auth/Guard/jwt.guard";
-// import { GetUser } from "src/Auth/decorater/get-user.decorater";
-// import { user } from "generated/prisma";
 import { RolesGuard } from "src/Role/roles.guard";
 import { Roles } from "src/Role/roles.decorater";
 import { Role } from "src/Role/role.enum";

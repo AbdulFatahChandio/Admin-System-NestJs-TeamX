@@ -4,7 +4,6 @@ import { CreateBookDto } from "./dto/create-book.dto";
 import { PrismaService } from "src/prisma/prisma.service";
 import { EditBookDto } from "./dto/edit-book.dto";
 import { PaginationDto } from "./dto/pagination-book.dto";
-import { Default_Page_Size } from "src/utils/constants";
 
 @Injectable()
 export class BookService {
@@ -15,8 +14,6 @@ export class BookService {
 
     async createBook(@Body() dto: CreateBookDto) {
         try {
-
-            // console.log("🚀 ~ AuthService ~ signup ~ this.prisma:", this.prisma)
             const book = await this.prisma.book.create({
                 data: {
                     title: dto.title,
@@ -29,14 +26,12 @@ export class BookService {
                     Stock: dto.stock
                 }
             })
-            // return user
 
-            // return this.signToken(user.id, user.email); It returns only token
             return {
                 message: 'Book created successfully', status: 'success',
                 book
             }
-            // token: await this.signToken(user.id, user.email)
+           
 
         } catch (error: any) {
             if (error?.code === 'P2002') {
@@ -51,7 +46,8 @@ export class BookService {
 
         const book = await this.prisma.book.findFirst({
             where: {
-                id: dto.id
+                id: dto.id,
+                deletedAt: null
             },
         });
         if (!book) {
@@ -67,20 +63,20 @@ export class BookService {
     async getBooks(dto: PaginationDto) {
         const total = await this.prisma.book.count({
             where: {
+                deletedAt: null,
                 title: {
                     search: dto.search,
-                    
+
                 },
-                
+
             },
         });
 
         const skip = (dto.page - 1) * dto.limit;
         const totalPages = Math.ceil(total / dto.limit);
-        //const totalPages = Math.ceil(total / dto.limit);
         console.log("🚀 ~ BookService ~ getBooks ~ totalPages:", totalPages)
         const books = await this.prisma.book.findMany({
-            skip: skip, //This is used for the pagination to get some specific books 
+            skip: skip,
             where: {
                 deletedAt: null,
                 title: {
@@ -90,8 +86,6 @@ export class BookService {
             take: dto.limit,
         })
         return {
-            // message:'All books here',
-            // status:'success',
             total: total,
             total_Pages: totalPages,
             data:
@@ -100,12 +94,10 @@ export class BookService {
     }
 
     async updateBook(@Body() dto: EditBookDto) {
-        //console.log("🚀 ~ BookService ~ updateBook ~ dto:", dto)
-        //console.log("🚀 ~ BookService ~ updateBook ~ Body:", Body)
-        // console.log("🚀 ~ BookService ~ updateBook ~ updateBook:", updateBook)
         const existingBook = await this.prisma.book.findFirst({
             where: {
-                id: dto.id
+                id: dto.id,
+                deletedAt: null
             },
         });
         if (!existingBook) {
@@ -114,6 +106,7 @@ export class BookService {
         const updatedBook = await this.prisma.book.update({
             where: {
                 id: dto.id,
+                deletedAt: null
             },
             data: {
                 title: dto.title,
@@ -126,7 +119,6 @@ export class BookService {
                 Stock: dto.stock
             }
         })
-        //console.log("🚀 ~ BookService ~ updateBook ~ updatedBoard:", updatedBook)
         return {
             message: 'Book updated successfully', status: 'success',
             data:
@@ -134,40 +126,6 @@ export class BookService {
 
         }
     }
-
-    // async deleteBook(dto: EditBookDto) {
-    //     const existingBook = await this.prisma.book.findFirst({
-    //         where: {
-    //             id: dto.id
-    //         },
-    //     });
-    //     if (!existingBook) {
-    //         throw new NotFoundException("Book doesn't Exist")
-    //     }
-
-    //     const book = await this.prisma.book.delete({
-    //         where: {
-    //             id: dto.id
-    //         }
-    //     })
-
-    //     const softDeleted = await this.prisma.user.update({
-    //         where: {
-    //             id: dto.id
-    //         },
-    //         data: {
-    //             deletedAt: new Date()
-    //         },
-    //     });
-
-
-    //     return {
-    //         message: 'Book deleted successfully', status: 'success',
-    //         data:
-    //             book,
-    //             softDeleted
-    //     }
-    // }
 
     async deleteBook(dto: EditBookDto) {
         const existingBook = await this.prisma.book.findFirst({
