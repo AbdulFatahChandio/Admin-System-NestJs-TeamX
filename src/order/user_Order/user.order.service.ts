@@ -68,22 +68,39 @@ export class UserOrderService {
         }
     }
 
-    async getOrder(@Param() dto: EditUserOrderDto, currentUser:user) {
-    
-            const book = await this.prisma.order.findFirst({
-                where: {
-                    id: dto.id,
-                    userId:currentUser.id
-                },
-            });
-            if (!book) {
-                throw new NotFoundException("No Order Found")
-            }
-            return {
-    
-                data:
-                    book
-            }
+    async getOrder(@Param() dto: EditUserOrderDto, currentUser: user) {
+
+        const order = await this.prisma.order.findFirst({
+            where: {
+                id: dto.id,
+                userId: currentUser.id
+            },
+        });
+        if (!order) {
+            throw new NotFoundException("No Order Found")
         }
-    
+        return {
+
+            data:
+                order
+        }
+    }
+
+    async getOrders(currentUser: user) {
+
+        const book = await this.prisma.order.findMany({
+            where: {
+                userId: currentUser.id
+            },
+        });
+        if (!book) {
+            throw new NotFoundException("No Order Found")
+        }
+        return {
+
+            data:
+                book
+        }
+    }
+
 }

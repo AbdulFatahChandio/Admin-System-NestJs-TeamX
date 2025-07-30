@@ -34,7 +34,7 @@ model book {
   id        Int       @id @default(autoincrement())
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
-  deletedAt DateTime? 
+  deletedAt DateTime?
 
   title        String
   author       String
@@ -61,12 +61,21 @@ model order {
   quantity        Int
   totalPrice      Decimal @db.Decimal(10, 2)
   shippingAddress String
+  status          Status @default(received)
 
   orderedBy user? @relation(fields: [userId], references: [id], onDelete: SetNull)
   userId    Int?
 
   bookOrdered book? @relation(fields: [bookId], references: [id], onDelete: SetNull)
   bookId      Int?
+}
+
+enum Status{
+  received
+  packed
+  shipped
+  delivered
+
 }
 
 // enum Role {

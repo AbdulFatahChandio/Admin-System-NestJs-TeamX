@@ -1,4 +1,4 @@
-import { Body, ForbiddenException, Injectable, NotFoundException, Query } from "@nestjs/common";
+import { Body, ForbiddenException, Injectable, NotFoundException, Param, Query } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { CreateBookDto } from "./dto/create-book.dto";
 import { PrismaService } from "src/prisma/prisma.service";
@@ -47,7 +47,7 @@ export class BookService {
 
     }
 
-    async getBook(@Body() dto: EditBookDto) {
+    async getBook(@Param() dto: EditBookDto) {
 
         const book = await this.prisma.book.findFirst({
             where: {

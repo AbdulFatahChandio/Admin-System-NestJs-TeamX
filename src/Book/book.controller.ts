@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Post, Put, Query, UseGuards, UsePipes, ValidationPipe } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards, UsePipes, ValidationPipe } from "@nestjs/common";
 import { CreateBookDto } from "./dto/create-book.dto";
 import { BookService } from "./book.service";
 import { JwtGuard } from "src/Auth/Guard/jwt.guard";
@@ -24,10 +24,10 @@ export class BookController {
         return this.bookService.createBook(dto)
     }
 
-    @Get('/getBook')
+    @Get('/getBook/:id')
     @UseGuards(RolesGuard)
     @Roles(Role.Admin, Role.User)
-    getBook(@Body() dto: EditBookDto) {
+    getBook(@Param() dto: EditBookDto) {
         return this.bookService.getBook(dto)
     }
 
