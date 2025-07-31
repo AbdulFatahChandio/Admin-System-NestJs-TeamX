@@ -48,7 +48,7 @@ export class AdminOrderService {
 
     }
 
-    async updateOrder(@Body() dto: AdminEditOrderDto) {
+    async updateOrder(dto: AdminEditOrderDto) {
         const order = await this.prisma.order.findFirst({
             where: {
                 id: dto.id,
@@ -57,49 +57,42 @@ export class AdminOrderService {
         if (!order) {
             throw new NotFoundException("No Order Found")
         }
-        if (order.status === "received" && dto.status === "packed") {
-            await this.prisma.order.update({
-                where: {
-                    id: dto.id,
-
-                },
-                data: {
-                    status: dto.status
-                }
-
-            })
+        const OrderStatusUpdateCriteria = {
+            received: "packed",
+            packed: "shipped",
+            shipped: "delivered"
         }
-        else if (order.status === "packed" && dto.status === "shipped") {
-            await this.prisma.order.update({
-                where: {
-                    id: dto.id,
-
-                },
-                data: {
-                    status: dto.status
-                }
-
-            })
+        
+        if (OrderStatusUpdateCriteria[order.status] !== dto.status) {
+            throw new BadRequestException(`Invalid status change from '${order.status}' to '${dto.status}'`);
         }
-        else if (order.status === "shipped" && dto.status === "delivered") {
-            await this.prisma.order.update({
-                where: {
-                    id: dto.id,
 
-                },
-                data: {
-                    status: dto.status
-                }
+        const data: { status: Status, courierName?: string, trackingId?: string } = {
+            status: dto.status
+        };
 
-            })
+
+        if (dto.status === 'shipped' && (!dto.courierName || !dto.trackingId)) {
+            throw new BadRequestException("Courier name and Tracking id is required")
         }
-        else {
-            throw new BadRequestException('Follow the Order process')
+
+        if (dto.status === "shipped") {
+            data.courierName = dto.courierName;
+            data.trackingId = dto.trackingId;
         }
+
+        const updatedOrder = await this.prisma.order.update({
+            where: {
+                id: dto.id,
+
+            },
+            data: data
+
+        })
         return {
             message: 'Order updated successfully',
             status: 'success',
-            data: this.updateOrder
+            data: updatedOrder
         }
     }
 }

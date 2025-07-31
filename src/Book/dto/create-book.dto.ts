@@ -32,9 +32,8 @@ export class CreateBookDto {
 
 
     @IsInt()
-    @IsPositive()
     @IsNotEmpty()
-    @Min(2)  
+    @Min(0)  
     @Max(1000000) 
     stock: number
 

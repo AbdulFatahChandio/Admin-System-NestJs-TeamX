@@ -61,7 +61,9 @@ model order {
   quantity        Int
   totalPrice      Decimal @db.Decimal(10, 2)
   shippingAddress String
-  status          Status @default(received)
+  status          Status  @default(received)
+  courierName     String?
+  trackingId      String?
 
   orderedBy user? @relation(fields: [userId], references: [id], onDelete: SetNull)
   userId    Int?
@@ -70,12 +72,11 @@ model order {
   bookId      Int?
 }
 
-enum Status{
+enum Status {
   received
   packed
   shipped
   delivered
-
 }
 
 // enum Role {

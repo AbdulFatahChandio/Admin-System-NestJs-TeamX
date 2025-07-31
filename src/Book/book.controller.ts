@@ -44,10 +44,10 @@ export class BookController {
     }
 
 
-    @Delete('/delete')
+    @Delete('/delete/:id')
     @UseGuards(RolesGuard)
     @Roles(Role.Admin)
-    deleteBook(@Body() dto: EditBookDto) {
+    deleteBook(@Param() dto: EditBookDto) {
         return this.bookService.deleteBook(dto)
     }
 }
