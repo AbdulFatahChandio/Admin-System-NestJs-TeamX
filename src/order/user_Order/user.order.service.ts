@@ -33,32 +33,37 @@ export class UserOrderService {
             const price = existingBook.price
             const quantityDecimal = new Decimal(dto.quantity);
             const totalPrice: Decimal = quantityDecimal.mul(existingBook.price);
-            await this.prisma.book.update({
-                data: {
-                    Stock: existingBook.Stock - dto.quantity
-                },
-                where: {
-                    id: dto.bookId
-                }
-            })
-            const order = await this.prisma.order.create({
-                data: {
-                    customer: currentUser.userName,
-                    userId: currentUser.id,
-                    bookId: dto.bookId,
-                    quantity: dto.quantity,
-                    shippingAddress: dto.shippingAddress,
-                    unitPrice: price,
-                    totalPrice: totalPrice
-                }
-            })
-            return {
-                message: 'Order booked successfully', status: 'success',
-                data:
-                    order
-            }
+            await this.prisma.$transaction(async (tx) => {
 
-        } catch (error: any) {
+                await tx.book.update({
+                    data: {
+                        Stock: existingBook.Stock - dto.quantity
+                    },
+                    where: {
+                        id: dto.bookId
+                    }
+                })
+                const order = await tx.order.create({
+                    data: {
+                        customer: currentUser.userName,
+                        userId: currentUser.id,
+                        bookId: dto.bookId,
+                        quantity: dto.quantity,
+                        shippingAddress: dto.shippingAddress,
+                        unitPrice: price,
+                        totalPrice: totalPrice
+                    }
+                })
+              
+                return {
+                      message: 'Order booked successfully', status: 'success',
+                      data:
+                          order
+                  }
+            })
+
+        }
+        catch (error: any) {
             if (error?.code === 'P2002') {
                 throw new ForbiddenException('Invalid User');
             }
