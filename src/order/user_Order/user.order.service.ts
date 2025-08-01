@@ -33,8 +33,7 @@ export class UserOrderService {
             const price = existingBook.price
             const quantityDecimal = new Decimal(dto.quantity);
             const totalPrice: Decimal = quantityDecimal.mul(existingBook.price);
-            await this.prisma.$transaction(async (tx) => {
-
+           const transaction1 = await this.prisma.$transaction(async (tx) => {
                 await tx.book.update({
                     data: {
                         Stock: existingBook.Stock - dto.quantity
@@ -54,14 +53,14 @@ export class UserOrderService {
                         totalPrice: totalPrice
                     }
                 })
-              
-                return {
-                      message: 'Order booked successfully', status: 'success',
-                      data:
-                          order
-                  }
-            })
 
+                return {
+                    message: 'Order booked successfully', status: 'success',
+                    data:
+                        order
+                }
+            })
+            return transaction1
         }
         catch (error: any) {
             if (error?.code === 'P2002') {

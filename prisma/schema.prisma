@@ -28,6 +28,8 @@ model user {
   role String @default("user")
 
   orders order[]
+
+  feedback feedback[]
 }
 
 model book {
@@ -36,16 +38,18 @@ model book {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
-  title        String
-  author       String
-  description  String
-  publish_Year String
-  edition      String
-  publisher    String
-  price        Decimal @default(100) @db.Decimal(10, 2)
-  Stock        Int     @default(0)
+  title         String
+  author        String
+  description   String
+  publish_Year  String
+  edition       String
+  publisher     String
+  price         Decimal @default(100) @db.Decimal(10, 2)
+  Stock         Int     @default(0)
+  averageRating Int?    @default(1)
 
-  orders order[]
+  orders   order[]
+  feedback feedback[]
 }
 
 model order {
@@ -57,19 +61,37 @@ model order {
   // author      String
   // description String
   customer        String
-  unitPrice       Decimal @db.Decimal(10, 2)
+  unitPrice       Decimal    @db.Decimal(10, 2)
   quantity        Int
-  totalPrice      Decimal @db.Decimal(10, 2)
+  totalPrice      Decimal    @db.Decimal(10, 2)
   shippingAddress String
-  status          Status  @default(received)
+  status          Status     @default(received)
   courierName     String?
   trackingId      String?
+  feedbacks       feedback[]
 
   orderedBy user? @relation(fields: [userId], references: [id], onDelete: SetNull)
   userId    Int?
 
   bookOrdered book? @relation(fields: [bookId], references: [id], onDelete: SetNull)
   bookId      Int?
+}
+
+model feedback {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  rating    Int
+  reviews   String
+
+  orderedBy user? @relation(fields: [userId], references: [id], onDelete: SetNull)
+  userId    Int?
+
+  bookOrdered book? @relation(fields: [bookId], references: [id], onDelete: SetNull)
+  bookId      Int?
+
+  ordered order? @relation(fields: [orderId], references: [id], onDelete: SetNull)
+  orderId Int?
 }
 
 enum Status {
