@@ -5,6 +5,7 @@ import { PrismaClient } from "generated/prisma";
 @Global()
 @Injectable()
 export class PrismaService extends PrismaClient{
+    Decimal: any;
     constructor(config : ConfigService){
         super({
             datasources:{

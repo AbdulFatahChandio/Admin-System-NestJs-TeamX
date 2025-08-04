@@ -4,6 +4,7 @@ import { CreateBookDto } from "./dto/create-book.dto";
 import { PrismaService } from "src/prisma/prisma.service";
 import { EditBookDto } from "./dto/edit-book.dto";
 import { PaginationDto } from "./dto/pagination-book.dto";
+import { Prisma } from "generated/prisma";
 
 @Injectable()
 export class BookService {
@@ -12,7 +13,7 @@ export class BookService {
         public config: ConfigService
     ) { }
 
-    async createBook(@Body() dto: CreateBookDto) {
+    async createBook(dto: CreateBookDto) {
         try {
             const book = await this.prisma.book.create({
                 data: {
@@ -31,7 +32,7 @@ export class BookService {
                 message: 'Book created successfully', status: 'success',
                 book
             }
-           
+
 
         } catch (error: any) {
             if (error?.code === 'P2002') {
@@ -42,7 +43,7 @@ export class BookService {
 
     }
 
-    async getBook(@Param() dto: EditBookDto) {
+    async getBook(dto: EditBookDto) {
 
         const book = await this.prisma.book.findFirst({
             where: {
@@ -53,8 +54,38 @@ export class BookService {
         if (!book) {
             throw new NotFoundException("Book doesn't Exist")
         }
-        return {
 
+        const sum_of_rating = await this.prisma.feedback.aggregate({
+            _sum: {
+                rating: true,
+            }, where: {
+                bookId: dto.id
+            }
+        })
+        const total_rating = await this.prisma.feedback.count({
+            where: {
+                bookId: dto.id
+            }
+        })
+
+        const totalRatingValue = sum_of_rating._sum.rating ?? 0;
+        const averageRating = total_rating > 0
+            ? new Prisma.Decimal(totalRatingValue).div(total_rating)
+            : new Prisma.Decimal(0);
+
+        console.log("🚀 ~ BookService ~ getBook ~ averageRating:", averageRating)
+        await this.prisma.book.update({
+            where: {
+                id: dto.id
+            },
+            data: {
+                numberOfRating: total_rating,
+                averageRating: averageRating,
+            }
+        });
+
+
+        return {
             data:
                 book
         }
@@ -66,15 +97,13 @@ export class BookService {
                 deletedAt: null,
                 title: {
                     search: dto.search,
-
                 },
-
             },
         });
 
         const skip = (dto.page - 1) * dto.limit;
         const totalPages = Math.ceil(total / dto.limit);
-        console.log("🚀 ~ BookService ~ getBooks ~ totalPages:", totalPages)
+        // console.log("🚀 ~ BookService ~ getBooks ~ totalPages:", totalPages)
         const books = await this.prisma.book.findMany({
             skip: skip,
             where: {
@@ -93,7 +122,7 @@ export class BookService {
         }
     }
 
-    async updateBook(@Body() dto: EditBookDto) {
+    async updateBook(dto: EditBookDto) {
         const existingBook = await this.prisma.book.findFirst({
             where: {
                 id: dto.id,

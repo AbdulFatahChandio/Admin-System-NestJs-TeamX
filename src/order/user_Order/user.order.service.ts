@@ -14,7 +14,7 @@ export class UserOrderService {
         public config: ConfigService
     ) { }
 
-    async createOrder(@Body() dto: CreateUserOrderDto, currentUser: user) {
+    async createOrder(dto: CreateUserOrderDto, currentUser: user) {
         try {
 
             const existingBook = await this.prisma.book.findFirst({
@@ -33,7 +33,7 @@ export class UserOrderService {
             const price = existingBook.price
             const quantityDecimal = new Decimal(dto.quantity);
             const totalPrice: Decimal = quantityDecimal.mul(existingBook.price);
-           const transaction1 = await this.prisma.$transaction(async (tx) => {
+            const orderResult = await this.prisma.$transaction(async (tx) => {
                 await tx.book.update({
                     data: {
                         Stock: existingBook.Stock - dto.quantity
@@ -60,7 +60,7 @@ export class UserOrderService {
                         order
                 }
             })
-            return transaction1
+            return orderResult
         }
         catch (error: any) {
             if (error?.code === 'P2002') {
