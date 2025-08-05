@@ -12,16 +12,6 @@ export class UserOrderFeedbackService {
     ) { }
 
     async createOrderFeedback(dto: CreateFeedbackDto, currentUser: user) {
-        // const book = await this.prisma.book.findFirst({
-        //     where: {
-        //         id: dto.bookId,
-        //         deletedAt: null
-        //     },
-        // });
-        // if (!book) {
-        //     throw new NotFoundException("Book doesn't Exist")
-        // }
-
         const existingOrder = await this.prisma.order.findFirst({
             where: {
                 id: dto.orderId,

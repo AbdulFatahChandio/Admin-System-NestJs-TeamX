@@ -24,6 +24,8 @@ model user {
   firstName String
   lastName  String
   userName  String   @unique
+  averageRating  Decimal? @db.Decimal(3, 2)
+  numberOfRating Int?
 
   role String @default("user")
 
@@ -38,19 +40,32 @@ model book {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
-  title         String
-  author        String
-  description   String
-  publish_Year  String
-  edition       String
-  publisher     String
-  price         Decimal @default(100) @db.Decimal(10, 2)
-  Stock         Int     @default(0)
-  averageRating Decimal? @db.Decimal(3, 2)
-  numberOfRating Int? 
+  title          String
+  description    String
+  publish_Year   String
+  edition        String
+  publisher      String
+  price          Decimal  @default(100) @db.Decimal(10, 2)
+  Stock          Int      @default(0)
+  authorAverageRating  Decimal? @db.Decimal(3, 2)
+  numberOfRating Int?
+  averageRating  Decimal? @db.Decimal(3, 2)
+
+  authorId   Int?    @default(autoincrement())
+  authorName String?
 
   orders   order[]
   feedback feedback[]
+}
+
+model author_Profile {
+  authorId   Int     @id @default(autoincrement())
+  authorName String
+  aboutAuthor String
+
+  averageRating  Decimal @db.Decimal(3, 2)
+  numberOfRating Int
+
 }
 
 model order {

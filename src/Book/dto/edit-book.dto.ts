@@ -7,7 +7,11 @@ export class EditBookDto {
 
     @IsString()
     @IsOptional()
-    author: string
+    authorName: string
+
+    @IsInt()
+    @IsNotEmpty()
+    authorId:number
 
     @IsString()
     @IsOptional()

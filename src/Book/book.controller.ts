@@ -17,21 +17,21 @@ export class BookController {
 
     @Post('/create')
     @UseGuards(RolesGuard)
-    @Roles(Role.Admin)
+    @Roles(Role.Author)
     createBook(@Body() dto: CreateBookDto) {
         return this.bookService.createBook(dto)
     }
 
-    @Get('/getBook/:id')
+    @Get('/getBook/:authorId/:id')
     @UseGuards(RolesGuard)
-    @Roles(Role.Admin, Role.User)
+    @Roles(Role.Admin, Role.User , Role.Author)
     getBook(@Param() dto: EditBookDto) {
         return this.bookService.getBook(dto)
     }
 
     @Get('/getBooks')
     @UseGuards(RolesGuard)
-    @Roles(Role.Admin, Role.User)
+    @Roles(Role.Admin, Role.User , Role.Author)
     getBooks(@Query() dto: PaginationDto) {
         return this.bookService.getBooks(dto)
     }

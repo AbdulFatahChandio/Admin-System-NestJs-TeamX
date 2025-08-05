@@ -6,6 +6,7 @@ import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
 import { AuthLoginDto } from "./dto/auth-login.dto";
 import { first } from "rxjs";
+import { createAuthorProfile } from "./dto/author-create_profile.dto";
 
 @Injectable()
 export class AuthService {
@@ -17,7 +18,7 @@ export class AuthService {
 
     }
 
-    async signup(@Body() dto: AuthDto) {
+    async signup(dto: AuthDto) {
         const hash = await bcrypt.hash(dto.password, 10)
         try {
             const user = await this.prisma.user.create({
@@ -76,7 +77,7 @@ export class AuthService {
 
 
         return {
-            message: 'User login successfully',
+            message: 'login successfully',
             status: 'success',
             data: {
                 email: user?.email,

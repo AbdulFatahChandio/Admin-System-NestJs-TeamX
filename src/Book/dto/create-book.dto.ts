@@ -6,9 +6,9 @@ export class CreateBookDto {
     @IsNotEmpty()
     title: string
 
-    @IsString()
+    @IsInt()
     @IsNotEmpty()
-    author: string
+    authorId:number
 
     @IsString()
     @IsNotEmpty()
